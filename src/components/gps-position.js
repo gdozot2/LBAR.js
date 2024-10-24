@@ -2,7 +2,7 @@ AFRAME.registerSystem('gps-position', {
   schema: {
     minAccuracy: { // data below this threshold will not update the position
       type: 'int',
-      default: 100
+      default: 10
     },
     minDistance: { // minimal distance from the last position before refreshing the actual one
       type: 'number',
@@ -24,10 +24,10 @@ AFRAME.registerSystem('gps-position', {
     this._onDeviceGPS = this._onDeviceGPS.bind(this);
     this._onDeviceGPSError = this._onDeviceGPSError.bind(this);
 
-    this._watchPosition = navigator.geolocation.watchPosition(this._onDeviceGPS, this._onDeviceGPSError, {
-      enableHighAccuracy: true,
-      timeout: 20000
-    });
+    const socket = new WebSocket('ws://yourIp:8080');
+    socket.onmessage = (event) => {
+        this._onDeviceGPS(JSON.parse(event.data));
+    };
 
     // Activate the video only on non vr/ar mode (in short: in AR 3DoF only)
     this.video = null;
