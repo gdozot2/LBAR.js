@@ -39,7 +39,7 @@ In production, switch LBAR.js’s script url to:
 ### gps-position system
 The *gps-position* system can be configured with three parameters:
 ```html
-<a-scene  gps-position="minAccuracy: 100; minDistance: 2; cam3DoF: true">
+<a-scene  gps-position="minAccuracy: 10; minDistance: 2; cam3DoF: true; websocketAddress: 'ws://yourIp:port'">
 ```
 Any GPS/location data above *minAccuracy* will be discarded.
 *minDistance* controls how frequently GPS updates are processed. With a default value of 2, the markers are repositioned when the user has travelled at least two meters.

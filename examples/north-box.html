@@ -9,7 +9,7 @@
     <script src="../src/components/pitch-roll-look-controls.js"></script>
   </head>
   <body>
-    <a-scene gps-position webxr="referenceSpaceType: unbounded; requiredFeatures: unbounded;">
+    <a-scene gps-position="websocketAddress: 'ws://yourIp:port'" webxr="referenceSpaceType: unbounded; requiredFeatures: unbounded;">
       <a-entity faces-north>
         <a-box id="north-box" position="0 0 -3" color="red"></a-box>
       </a-entity>

@@ -11,7 +11,11 @@ AFRAME.registerSystem('gps-position', {
     cam3DoF: {
       type: 'boolean',
       default: true
-    }
+    },
+    websocketAddress: { // minimal distance from the last position before refreshing the actual one
+      type: 'string',
+      default: '' // default smartphone gps accuracy is ~2 [m]
+    },
   },
 
   init: function () {
@@ -24,10 +28,20 @@ AFRAME.registerSystem('gps-position', {
     this._onDeviceGPS = this._onDeviceGPS.bind(this);
     this._onDeviceGPSError = this._onDeviceGPSError.bind(this);
 
-    const socket = new WebSocket('ws://yourIp:8080');
-    socket.onmessage = (event) => {
-        this._onDeviceGPS(JSON.parse(event.data));
-    };
+    if (this.data.websocketAddress.length > 0 ) {
+      console.log(this.data.websocketAddress)
+      const socket = new WebSocket(this.data.websocketAddress);
+      socket.onmessage = (event) => {
+          this._onDeviceGPS(JSON.parse(event.data));
+      };
+    } else {
+      console.log('b')
+      this._watchPosition = navigator.geolocation.watchPosition(this._onDeviceGPS, this._onDeviceGPSError, {
+        enableHighAccuracy: true,
+        timeout: 20000
+      });
+    }
+
 
     // Activate the video only on non vr/ar mode (in short: in AR 3DoF only)
     this.video = null;
